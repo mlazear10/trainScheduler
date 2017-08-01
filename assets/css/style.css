@@ -1,16 +1,21 @@
 body {
-
+ background: url("brilliant.png");
 }
 
-#mainContainer {
+/* #mainContainer {
 	width: 80%;
-}
+}*/
+
 .jumbotron {
 	background-color: #337ab7;
-	font-family: serif;
+	color: white;
 }
 
-.panel-heading {
+th {
+	text-decoration: underline;
+}
+
+/*.panel-heading {
 	font-family: serif;
 	font-size: 20px;
-}
+}*/
