@@ -1,5 +1,5 @@
 body {
- background: url("brilliant.png");
+ background: url("brillant.png");
 }
 
 /* #mainContainer {
@@ -7,12 +7,18 @@ body {
 }*/
 
 .jumbotron {
-	background-color: #337ab7;
+	background-image: url('https://media.giphy.com/media/26tk1c1vLvtQ6WojS/giphy.gif');
 	color: white;
+
 }
 
 th {
 	text-decoration: underline;
+}
+
+td,
+th {
+	text-align: center;
 }
 
 /*.panel-heading {

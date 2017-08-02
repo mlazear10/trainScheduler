@@ -40,6 +40,11 @@ var nextTrainFormatted = '';
 
 console.log("app.js has started.")
 
+// Code included inside $( document ).ready() will only run once the page Document Object Model (DOM) is ready for JavaScript code to execute. 
+$(document).ready(function() {
+
+$("#timeNow").append(moment().format("HH:mm"));
+
 $("#submitButton").on("click", function() {
 	//Don't refresh the page!
 	event.preventDefault();
@@ -48,8 +53,33 @@ $("#submitButton").on("click", function() {
 	train.destination = $("#destination").val().trim();
 	train.startTime = $("#startTime").val().trim();
 	train.frequency = $("#frequency").val().trim();
-	train.minutesAway = train.startTime + train.frequency;
-	train.nextArrival = train.startTime;
+
+	 firstTimeConverted = moment(train.startTime, "HH:mm").subtract(1, "days");
+	 console.log("First time converted " + firstTimeConverted)
+
+     currentTime = moment(); 
+     console.log(currentTime); //log the current time
+
+
+     diffTime = moment().diff(moment(firstTimeConverted), "minutes"); 
+     console.log("diffTime: " + diffTime);
+
+     tRemainder = diffTime % train.frequency;
+     console.log("tRemainder: " + tRemainder);
+
+     minutesTillTrain = train.frequency - tRemainder;
+     console.log("minutesTillTrain: " + minutesTillTrain);
+
+     nextTrain = moment().add(minutesTillTrain, "minutes");
+     console.log("nextTrain: " + nextTrain);
+
+     nextTrainFormatted = moment(nextTrain).format("HH:mm");
+     console.log("nextTformatted: " + nextTrainFormatted);
+
+     train.minutesAway = minutesTillTrain;
+     console.log("train.minutesAway: " + train.minutesAway);
+	 train.nextArrival = nextTrainFormatted;
+
 
 	// if function to make sure all fields are selected
 	if(train.name == "" || train.destination == "" || train.startTime == "" || train.frequency == "") {
@@ -90,14 +120,15 @@ $("#submitButton").on("click", function() {
 
 //This event is happneing on the Firebase. It takes up to 2 function: the first function (scuccss function) & the second function (error funtion)
 database.ref().on("child_added", function(snapshot) {
-  console.log(snapshot.val());
+  // console.log(snapshot.val());
 
   $("#trainTable").append("<tr><td>" + 
   	snapshot.val().name + "</td><td>" + 
   	snapshot.val().destination + "</td><td>" + 
   	snapshot.val().frequency + "</td><td>" + 
   	snapshot.val().nextArrival + "</td><td>" +
-  	snapshot.val().minutesAway + "</td></tr>");
+  	snapshot.val().minutesAway + "</td><td>" +
+  	"<input type='submit' value='Remove Train' class='remove-train btn btn-primary></td></tr>");
 
 // handle errors ask a question on this
 }, function(errorObject) {
@@ -105,42 +136,9 @@ database.ref().on("child_added", function(snapshot) {
 });
 
 
-// Set time variables
-
-//
-// firstTimeConverted = moment(train.startTime, "HH:mm").subtract(1, "days");
-// console.log(firstTimeConverted);
-
-// currentTime = moment().format("HH:mm");
-// console.log(currentTime);
-
-// diffTime = moment().diff(moment.unix(train.startTime), "minutes");
-// console.log(diffTime);
-
-// tRemainder = diffTime % frequency;
-// minutesTillTrain = frequency - tRemainder;
-// nextTrain = moment().add(minutesTillTrain, "minutes");
-// nextTrainFormatted = moment(nextTrain).format("HH:mm");
-
-var diffTime = moment().diff(moment.unix(train.startTime), "minutes");
-var tRemainder = moment().diff(moment.unix(train.startTime), "minutes") % train.frequency ;
-var tMinutes = train.frequency - tRemainder;
-
-// To calculate the arrival time, add the tMinutes to the currrent time
-var tArrival = moment().add(tMinutes, "m").format("HH:mm"); 
-console.log(tMinutes);
-console.log(tArrival);
-
-console.log(moment().format("HH:mm"));
-console.log(tArrival);
-console.log(moment().format("X"));
-
-// neeed to setup an interval function to get the times working
-
-//Create a loop to find out when the next train is coming
-// for (i = firstTrain, i >= timeNow )
 
 
 
 
-
+//Closes the JQuery wrapper
+});
